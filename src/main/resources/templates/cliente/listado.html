@@ -10,18 +10,20 @@
         <header th:replace="layout/plantilla :: header" /> 
 
         <div class="contenido">            
-            <h2>Lista de clientes</h2>            
+            <h2 th:text="#{cliente.titulo}">Lista de clientes</h2> 
+            <a th:href="@{/cliente/nuevo}" th:text="#{cliente.nuevo}" 
+               sec:authorize="hasrole('ROLE_ADMIN')">Nuevo Cliente</a>
             <div th:if="${clientes != null and !clientes.empty}">                
                 <table border="1">                    
                     <thead>                        
                         <tr>                            
-                            <th>Nombre</th>                            
-                            <th>Apellidos</th>                            
-                            <th>Correo</th>                            
-                            <th>Teléfono</th>                            
-                            <th>Límite</th>                            
-                            <th>Modificar</th>                            
-                            <th>Eliminar</th>                        
+                            <th th:text="#{cliente.nombre}">Nombre</th>                            
+                            <th th:text="#{cliente.apellidos}">Apellidos</th>                            
+                            <th th:text="#{cliente.correro}">Correo</th>                            
+                            <th th:text="#{cliente.telefono}">Teléfono</th>                            
+                            <th th:text="#{cliente.limite}">Límite</th>                            
+                            <th th:text="#{accion.actualizar}" sec:authorize="hasrole('ROLE_ADMIN')"></th>                            
+                            <th th:text="#{accion.eliminar}" sec:authorize="hasrole('ROLE_ADMIN')"></th>                        
                         </tr>                    
                     </thead>                    
                     <tbody>                        
@@ -30,15 +32,17 @@
                             <td th:text="${item.apellidos}"></td>                            
                             <td th:text="${item.correo}"></td>                            
                             <td th:text="${item.telefono}"></td>                            
-                            <td th:text="${#numbers.formatDecimal(item.credito.limite, 3 ,2)}"></td>                            
-                            <td><a th:href="@{/cliente/modificar/} + ${item.idCliente}">Modificar</a></td>                            
-                            <td><a th:href="@{/cliente/eliminar/} + ${item.idCliente}">Eliminar</a></td>                        
+                            <td th:text="${item.credito.limite}"></td>                            
+                            <td sec:authorize="hasrole('ROLE_ADMIN')"><a th:href="@{/cliente/modificar/} + ${item.idCliente}" 
+                                   th:text="#{accion.actualizar}">Modificar</a></td>                            
+                            <td sec:authorize="hasrole('ROLE_ADMIN')"><a th:href="@{/cliente/eliminar/} + ${item.idCliente}" 
+                                   th:text="#{accion.eliminar}">Eliminar</a></td>                        
                         </tr>                    
                     </tbody>                
                 </table>            
             </div>            
             <div th:if="${clientes == null or clientes.empty}">                
-                La lista de clientes está vacía.
+                <p th:text="#{cliente.no_mostrar}"></p>
             </div>        
         </div>        
         <footer th:replace="layout/plantilla :: footer" />    
